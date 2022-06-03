@@ -22,7 +22,7 @@
   .breadcrumb-wrapper ol li + li::before {
     position: absolute;
     content: "";
-    background-image: url(../assets/images/breadcrumb-arrow.svg);
+    background-image: url(../assets/breadcrumb-arrow.svg);
     left: 6px;
     background-repeat: no-repeat;
     background-size: 10px;

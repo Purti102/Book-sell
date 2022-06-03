@@ -1,15 +1,17 @@
 <app-navbar></app-navbar>
 <app-searchbar></app-searchbar>
-<div class="container">
+ <!-- <div class="container">
   <div class="breadcrumb-wrapper">
     <ol>
       <li>
-        <a href="#" title="Home">Home</a>
+        <a routerLinkActive="list-item-active" routerLink="/product-list" title="Home">Home</a>
       </li>
       <li>
-        <p>Create an Account</p>
+        <p><a routerLinkActive="list-item-active" routerLink="/register" title="Register">Create an Account</a></p>
       </li>
     </ol>
   </div>
-</div>
-<app-register></app-register>
+</div>  -->
+<router-outlet></router-outlet>
+<app-home></app-home>
+<app-footer></app-footer>

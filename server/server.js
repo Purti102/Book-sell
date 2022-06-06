@@ -5,6 +5,7 @@ const cors = require('cors');
 const session = require('express-session');
 const userRoute = require('./routes/userRoutes');
 const bookRoute = require('./routes/bookRoutes');
+const cartRoute = require('./routes/cartRoutes');
 
 dotenv.config();
 mongoose.connect(
@@ -30,6 +31,8 @@ app.use(cors());
 app.use(userRoute);
 
 app.use(bookRoute);
+
+app.use(cartRoute);
 
 
 

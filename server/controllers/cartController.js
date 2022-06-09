@@ -1,6 +1,5 @@
 var mongoose = require("mongoose");
 const cartSchema = require("../models/cartModel");
-const bookDataCollection = require("../models/bookModel");
 
 // cart schema
 const cartDataCollection = mongoose.model("cart", cartSchema);
@@ -20,8 +19,8 @@ console.log("cart Controller is called");
 
 //add cart
 exports.addCart = async (req, res, next) => {
-  let userId = req.user.id;
-  let bookId = req.params.bookId;
+  let userId = req.user._id;
+  let bookId = req.params._id;
 
   bookDataCollection
     .findById(bookId)

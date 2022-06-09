@@ -13,7 +13,7 @@ const authAPI = async function (req, res, next) {
     if (token == undefined) {
       throw new Error("not Authorized");
     }
-    
+
     jwt.verify(token, process.env.PUBLICKEY, async function (err, decoded) {
       console.log(err);
       if (err) {

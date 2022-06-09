@@ -23,6 +23,11 @@ const usersSchema = new mongoose.Schema({
     enum: ["Admin", "Seller", "Buyer"], //enum
     required: true,
   },
+  cartbook: [
+    {
+      bookid: {type: mongoose.Schema.Types.ObjectId, ref:'book', review: String},
+    }
+  ]
 });
 
 module.exports = usersSchema;

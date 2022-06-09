@@ -12,13 +12,24 @@ const bookSchema = new mongoose.Schema({
   Description: {
     type: String,
     required: true,
+    trim: true,
   },
-  Base64image: {
+  BookPictures: {
     type: String,
     required: true,
   },
   Category: {
     type: String,
+    required: true,
+  },
+  offer: { type: Number },
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "users",
+    required: true,
+  },
+  quantity: {
+    type: Number,
     required: true,
   },
 });

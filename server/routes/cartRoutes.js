@@ -5,6 +5,6 @@ const router = express.Router();
 
 console.log("Cart Router is called");
 
-router.post("/addcart", cartController.addCart);
+router.post("/addcart", cartController.addcart);
 
 module.exports = router;

@@ -20,7 +20,7 @@ exports.addBook = (req, res, next) => {
     Name: req.body.Name,
     Price: req.body.Price,
     Description: req.body.Description,
-    Base64image: req.body.Base64image,
+    BookPictures: req.body.BookPictures,
     Category: req.body.Category,
   });
 
@@ -52,7 +52,7 @@ exports.updateBook = async (req, res, next) => {
     Name: req.body.Name,
     Price: req.body.Price,
     Description: req.body.Description,
-    Base64image: req.body.Base64image,
+    BookPictures: req.body.BookPictures,
     Category: req.body.Category,
   };
   await bookDataCollection.findOneAndUpdate(

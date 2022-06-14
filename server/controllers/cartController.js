@@ -6,58 +6,94 @@ const cartDataCollection = mongoose.model("cart", cartSchema);
 
 console.log("cart Controller is called");
 
-//get cart size
-// exports.getCartSize = async (req, res, next) => {
-//   let userId = req.user.id;
-//   cartDataCollection.findById(userId, function (err, user) {
-//     if (err) console.log(err.message);
-//     res.status(200).json({
-//       user: user,
-//     });
-//   });
-// };
+exports.addItemToCart = (req, res) => {
+  cartSchema.findone({ user: req.user._id }).exec((error, cart) => {
+    if (error) return res.status(400).json({ error });
+    if (cart) {
+      //if cart already exists then update cart by quantity
+      let promiseArray = [];
 
-//add cart
-exports.addCart = async (req, res, next) => {
-  let userId = req.user._id;
-  let bookId = req.params._id;
+      req.body.cartItems.forEach((cartItems) => {
+        const book = cartItem.book;
+        const item = cart.cartItems.find((c) => c.book == book);
+        let condition, update;
+        if (item) {
+          condition = { user: req.user._id, "cartItems.book": book };
+          update = {
+            $set: {
+              "cartItems.$": cartItem,
+            },
+          };
+        } else {
+          condition = { user: req.user._id };
+          update = {
+            $push: {
+              cartItems: cartItem,
+            },
+          };
+        }
+        promiseArray.push(runUpdate(condition, update));
+      });
+      Promise.all(promiseArray)
+        .then((response) => res.status(201).json({ response }))
+        .catch((error) => res.status(400).json({ error }));
+    } else {
+      //if cart not exist then create a new cart
+      const cart = new Cart({
+        user: req.user._id,
+        cartItems: req.body.cartItems,
+      });
+      cart.save((error, cart) => {
+        if (error) return res.status(400).json({ error });
+        if (cart) {
+          return res.status(201).json({ cart });
+        }
+      });
+    }
+  });
+};
 
-  bookDataCollection
-    .findById(bookId)
-    .then((book) => {
-      if (!book) {
-        return res.status(400).json({
-          message: "There is no book with the given id in our database.",
+exports.getCartItems = (req, res) => {
+  //const { user } = req.body.payload;
+  //if(user){
+  Cart.findOne({ user: req.user._id })
+    .populate("cartItems.book", "_id name price bookPictures")
+    .exec((error, cart) => {
+      if (error) return res.status(400).json({ error });
+      if (cart) {
+        let cartItems = {};
+        cart.cartItems.forEach((item, index) => {
+          cartItems[item.book._id.toString()] = {
+            _id: item.book._id.toString(),
+            name: item.book.Name,
+            img: item.book.BookPictures[0].img,
+            price: item.book.Price,
+          };
         });
+        res.status(200).json({ cartItems });
       }
-
-      cartDataCollection.findOne({ user: userId }).then((cart) => {
-        let bookIds = [];
-
-        for (let b of cart.books) {
-          bookIds.push(b.toString());
-        }
-
-        if (bookIds.indexOf(bookId) !== -1) {
-          return res.status(400).json({
-            message: "Book is already in your cart",
-          });
-        }
-
-        cart.books.push(bookId);
-        cart.totalPrice += book.Price;
-        cart.save();
-
-        res.status(200).json({
-          message: "Book added to cart!",
-          data: cart,
-        });
-      });
-    })
-    .catch((err) => {
-      console.log(err);
-      return res.status(400).json({
-        message: "Something went wrong, please try again.",
-      });
     });
+  //}
+};
+
+// new update remove cart items
+exports.removeCartItems = (req, res) => {
+  const { bookId } = req.body.payload;
+  if (bookId) {
+    Cart.update(
+      { user: req.user._id },
+      {
+        $pull: {
+          cartItems: {
+            book: bookId,
+          },
+        },
+      }
+    ).exec((error, result) => {
+      if (error) return res.status(400).json({ error });
+      if (result) {
+        res.status(202).json({ result });
+      }
+    });
+  }
 };

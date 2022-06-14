@@ -23,15 +23,15 @@ const bookSchema = new mongoose.Schema({
     required: true,
   },
   offer: { type: Number },
-  createdBy: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "users",
-    required: true,
-  },
-  quantity: {
-    type: Number,
-    required: true,
-  },
+  // createdBy: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: "users",
+  //   required: true,
+  // },
+  // quantity: {
+  //   type: Number,
+  //   required: true,
+  // },
 });
 
 module.exports = bookSchema;
